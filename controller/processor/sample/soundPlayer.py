@@ -1,20 +1,29 @@
 #-*- coding: utf-8 -*-
-# import sys
-# # reload(sys)
-# sys.setdefaultencoding('utf-8')
 
 from gtts import gTTS
 import os
 
-fullPath = os.getcwd() + '/tttt.wav'
+
+import platform
+print (platform.system(), platform.release())
+
+
+fullPath = os.getcwd() + '/tttt.mp3'
 
 tts = gTTS(text='Hello 한글 테스트 뷁 퉷 영 녘  Boy', lang='ko')
 tts.save(fullPath)
-os.system('tttt.wav')
+print('fullPath', fullPath)
+
+
+if platform.system() == 'Windows':
+  print('Windows')
+  os.system(fullPath)
+else:
+  os.system("mplayer " + fullPath)
+  pass
 
 
 
-# from pygame import mixer # Load the required library
 
 # mixer.init()
 # mixer.music.load(fullPath)

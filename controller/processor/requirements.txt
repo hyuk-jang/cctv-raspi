@@ -1,3 +1,2 @@
 gtts
-nose
-sphinx
+apscheduler
