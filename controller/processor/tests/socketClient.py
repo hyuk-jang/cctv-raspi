@@ -3,8 +3,8 @@ import sys
 import os
 
 
-# HOST = "192.168.1.100"
-HOST = socket.gethostname()
+HOST = "127.0.0.1"
+# HOST = socket.gethostname()
 PORT = 3334
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

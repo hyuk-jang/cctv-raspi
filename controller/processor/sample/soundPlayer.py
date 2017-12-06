@@ -12,6 +12,10 @@ def init():
     currentPath = os.getcwd()
     folderPath = currentPath + '/sample/sound/'
 
+    filePath = folderPath + 'silentAlarm.mp3'
+    tts = gTTS(text='    ', lang='ko')
+    tts.save(filePath)
+
     filePath = folderPath + 'firstAlarm.mp3'
     tts = gTTS(text='불법 주정차 시간이 15분을 경과하였습니다. 신속히 차량을 이동하여 주십시오', lang='ko')
     tts.save(filePath)
@@ -38,9 +42,9 @@ def startAlarm(illegalityParkingImgList):
     quotient = storageLen // 5  # 몫
     remainder = storageLen % 5  # 나머지
 
-    # 나머지가 0이 아닐경우 무시
+    # 나머지가 0이 아닐경우 무음
     if remainder != 0:
-        return False
+        filePath = folderPath + 'silentAlarm.mp3'
     # 최초
     elif quotient == 3 :
         filePath = folderPath + 'firstAlarm.mp3'
@@ -51,7 +55,7 @@ def startAlarm(illegalityParkingImgList):
     elif quotient == 6:
         filePath = folderPath + 'fourthAlarm.mp3'
     else:
-        return False
+        filePath = folderPath + 'silentAlarm.mp3'
 
     # print (platform.system(), platform.release())
     # 윈도우일 경우

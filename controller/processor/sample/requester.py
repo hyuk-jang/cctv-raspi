@@ -47,9 +47,11 @@ def requestPostHttp(httpPath, fileName, ext):
 # Image의 확장자는 png만 사용
 # 접속이 종료되면 Server측은 그동안 수신된 Buffer를 합쳐 image 파일로 만들어야함
 '''
-def submitImgWithSocket(fileName, hasSendAll):
-    HOST = socket.gethostname()
-    PORT = 3334
+def submitImgWithSocket(fileName, hasSendAll, socketInfo):
+    # HOST = socket.gethostname()
+    print('submitImgWithSocket socketInfo\t', socketInfo)
+    HOST = socketInfo['host']
+    PORT = socketInfo['port']
 
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((HOST, PORT))
