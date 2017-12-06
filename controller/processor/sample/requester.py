@@ -3,10 +3,11 @@ import urllib3
 import socket
 
 # CCTV 관련 데이터 Http Get 방식으로 보내고자 할 경우
-def requestGetHttp(httpPath):
+def requestGetHttp(httpPath, query):
+    url = httpPath + '?' + query if query == '' else httpPath
     try:
         http = urllib3.PoolManager(retries=False)
-        r = http.request('GET', httpPath)
+        r = http.request('GET', url)
         return True if r.status == 200 else False
     except (urllib3.exceptions.NewConnectionError) as e:
         print(e)
@@ -17,10 +18,10 @@ def requestGetHttp(httpPath):
 
 # Image를 Http Post 방식으로 보내고자 할 경우 (이번 CCTV 프로젝트에서는 쓰지 않음)
 # FIXME 아직 완성되지 않음 (테스트해보지 못함)
-def requestPostHttp(httpPath, fileName, ext):
+def requestPostHttp(httpPath, fileName):
     print(httpPath, fileName)
     try:
-        filePath = os.getcwd() + '/sample/image/' + fileName + '.' + ext
+        filePath = os.getcwd() + '/sample/image/' + fileName + '.png'
         print('filePath\t', filePath)
         with open(filePath, 'rb') as img:
             binary_data = img.read()
