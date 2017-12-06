@@ -1,0 +1,5 @@
+
+
+def socketOption():
+    host = ''
+    return {}
