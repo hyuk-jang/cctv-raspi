@@ -1,11 +1,12 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
+import datetime
 # Customize Module
 import requester, soundPlayer, cctvImagingProcessor, config
 
 class MainProcessor() :
-    def __init__(self):
-        # 이전 사진, 현재 캡쳐 사진을 저장할 변수
-        self.picStorage = {'prev':'', 'curr': ''}
+    def __init__(self, basePictureName):
+        # 기준사진, 이전 사진, 현재 캡쳐 사진을 저장할 변수
+        self.picStorage = {'base':basePictureName, 'prev':'', 'curr': ''}
         # 불법주차 이미지 명 리스트
         self.illegalityParkingImgList = []
         # self.illegalityParkingImgList = ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']
@@ -24,7 +25,12 @@ class MainProcessor() :
 
     # CCTV Main Processor Def
     def main(self):
-        hasClearMsgSubmit = self.imageProcessing()
+        '''
+            카메라 capture
+        '''
+        dt = datetime.datetime.now()
+        illegalStatus = self.imageProcessing()
+
         '''
             Web Server에서 불법 주차 전환 여부 확인 후 조치
         '''
@@ -40,51 +46,51 @@ class MainProcessor() :
         print('resAlarm', resAlarm)
 
 
-       
+        '''
+            Web Server로 Processor 상태값 및 Image 전송
+        '''
+        self.sendCctvStatus2WebServer(illegalStatus, dt)
 
-        info = config.getSocketInfo()
-        # print(info, info['host'])
-
-        # Send Image With Socket
-        # requester.submitImgWithSocket('aaaa', False, info)
 
     # Web Server로 현재 cctv processor 상태 값을 전송
-    def sendCctvStatus2WebServer(self):
+    # @param {string} illegalStatus 불법 주차 여부 'continue': 불법주차지속, 'new': 신규 불법주차, 'reset': 불법주차 해제
+    # @param {datetime} dt Capture 시각
+    def sendCctvStatus2WebServer(self, illegalStatus, dt):
+        ts = int(dt.utcnow().timestamp())
+        # print('captureTime', dt.utcnow(), captureTime, ts)
+
         # 현재 저장되어 있는 이미지 리스트 길이
         illegalLength = self.illegalityParkingImgList.__len__()
         '''
-            15분 이상 불법 주차 시 Http GET Protocol 전송
+            Http GET Protocol 전송
         '''
         webServerInfo = config.getWebServerInfo()
         cctvProcessorInfo = config.getCctvProcessorInfo()
-
+        socketInfo = config.getSocketInfo()
+        
         count = illegalLength   # 현재 불법 주차 count
         cctvId = cctvProcessorInfo['cctvId']
 
+        # cctv 상태 값을 받는 Web Server Url
         cctvStatusManagerUrl = webServerInfo['host'] + webServerInfo['cctvStatusManagerUrl']
+        # cctv 이미지를 받는 Web Server Url
         imageReceiveManagerUrl = webServerInfo['host'] + webServerInfo['imageReceiveManagerUrl']
+        # cctv 이미지를 받는 Socket Url
+        imageReceiveManagerUrl = socketInfo['host'] + webServerInfo['imageReceiveManagerUrl']
 
-        if illegalLength < 15:
-            return
-        # 불법 주정차 15분에 도달할 경우
-        elif illegalLength == 15:
-            # TODO 현재 상태 값 전송 GET
-            # Requst Http Get
-            query = 'cctvId' + cctvId + '&count=' + count + '&img=' + self.illegalityParkingImgList[0]
-            result = requester.requestGetHttp(cctvStatusManagerUrl, query)
-            # TODO 최초 사진 전송 POST
-            result = requester.requestPostHttp(imageReceiveManagerUrl, self.illegalityParkingImgList[0])
-        
         # Requst Http Get
-        result = requester.requestGetHttp('http://localhost:3333')
-        # TODO 현재 사진 전송 POST
+        query = 'cctvid=' + cctvId + '&count=' + str(count) + '&status=' + illegalStatus + '&img=' + self.picStorage['curr'] + '&ts=' + str(ts)
+        result = requester.requestGetHttp(cctvStatusManagerUrl, query)
+
+        # TODO 사진 전송 POST
+        # result = requester.requestPostHttp(imageReceiveManagerUrl, self.picStorage['curr'])
+        result = requester.submitImgWithSocket(self.picStorage['curr'], False, socketInfo)
+        
+    
 
 
-    # @return {boolean} True: 불법 주차 해제 전송(to Web Server), False: 변화없음
+    # @return {string} 'reset': 불법주차 해제, 'new': 신규 불법주차, 'continue': 불법주차 지속, 'end': 불법주차 30분 초과
     def imageProcessing(self):
-        '''
-            카메라 capture
-        '''
         # 현재 찍은 이미지명 저장
         captureName = cctvImagingProcessor.captureImage()
         # 이미지 지정 재정의
@@ -104,23 +110,35 @@ class MainProcessor() :
             if judgeResult == 'new':
                 print('신규 불법 주차 감시 시작')
                 self.illegalityParkingImgList.append(captureName)
-            if(illegalLength > 14):
-                # TODO Web Server로 해제 정보 전송
-                print('불법 주차 경보 해제 통보 필요')
-            return True
         # 동일 불법 주차가 계속되고 있다면
         elif judgeResult == 'continue' :
             if(illegalLength >= 30):
                 print('더이상 해당 차량에 대해서는 불법주차를 감시하지 않음')
                 self.hasObserve = False
-                return False
-
+                return 'end'
+            # 불법 주차 리스트에 현재 사진명 추가
             self.illegalityParkingImgList.append(captureName)
 
-        return False
+        return judgeResult
 
-mainProcessor = MainProcessor()
+'''
+    Main Start
+'''
+mainProcessor = MainProcessor('')
 
 # mainProcessor.runScheduler()
+# mainProcessor.main()
+
+
+'''
+    Main Test Code
+'''
+## TEST Interval
+## main Test 용
 mainProcessor.main()
+
+## Invter val Test 용
+# sched = BlockingScheduler()
+# sched.add_job(mainProcessor.main, 'interval', seconds=2)
+# sched.start()
 

@@ -1,6 +1,6 @@
 {
     "remotePath": "/home/pi/Desktop/cctv",
-    "host": "192.168.0.48",
+    "host": "192.168.0.70",
     "username": "pi",
     "password": "1234",
     "port": 22,

@@ -14,9 +14,9 @@ def getSocketInfo():
 def getWebServerInfo():
     host = 'http://127.0.0.1:3333'
     # Get Submit Cctv Status
-    cctvStatusManagerUrl = '/cctvstatusreceiver'
+    cctvStatusManagerUrl = '/cctv_status_receiver'
     # Post Submit Image File
-    imageReceiveManagerUrl = '/imagereceiver'
+    imageReceiveManagerUrl = '/ay'
     # Receive Command By WebServer (Polling)
-    checkCommanderUrl = '/checkcommander'
+    checkCommanderUrl = '/check_commander'
     return {'host': host, 'cctvStatusManagerUrl': cctvStatusManagerUrl, 'imageReceiveManagerUrl': imageReceiveManagerUrl, 'checkCommanderUrl': checkCommanderUrl}

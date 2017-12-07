@@ -4,7 +4,9 @@ import socket
 
 # CCTV 관련 데이터 Http Get 방식으로 보내고자 할 경우
 def requestGetHttp(httpPath, query):
-    url = httpPath + '?' + query if query == '' else httpPath
+    print('request query',query)
+    url = httpPath + '?' + query if query != '' else httpPath
+    print('url',url)
     try:
         http = urllib3.PoolManager(retries=False)
         r = http.request('GET', url)
@@ -19,18 +21,31 @@ def requestGetHttp(httpPath, query):
 # Image를 Http Post 방식으로 보내고자 할 경우 (이번 CCTV 프로젝트에서는 쓰지 않음)
 # FIXME 아직 완성되지 않음 (테스트해보지 못함)
 def requestPostHttp(httpPath, fileName):
-    print(httpPath, fileName)
+    print('requestPostHttp', httpPath, fileName)
+    # TEST 파일명 고정으로 해봄
+    fileName = 'aaaa'
     try:
         filePath = os.getcwd() + '/sample/image/' + fileName + '.png'
         print('filePath\t', filePath)
-        with open(filePath, 'rb') as img:
-            binary_data = img.read()
 
+        with open(filePath, 'rb') as img:
+            # binary_data = img.read()
+            byteList = b''
+            while True:
+                line = file_name.readline()
+                if not line:
+                    break
+                else:
+                    byteList += line
+            print('byteList', byteList.__len__())
+
+        print("[+] Sending file...")
+        print('encoded_image',byteList)
         http = urllib3.PoolManager(retries=False)
         r = http.request(
             'POST',
             httpPath + ':' + fileName,
-            body = binary_data,
+            body = byteList,
             headers = {'Content-Type': 'image/jpeg'})
         return True if r.status == 200 else False
     except UnicodeDecodeError as e:
@@ -59,6 +74,9 @@ def submitImgWithSocket(fileName, hasSendAll, socketInfo):
     print("[+] Connected with Server")
 
     # get file name to send
+    # TEST Code
+    fileName = 'aaaa'
+    # TEST Code
     f_send = os.getcwd() + '/sample/image/' + fileName + '.png'
     # open file
     file_name = open(f_send,'rb')
