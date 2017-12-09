@@ -1,3 +1,11 @@
+
+# ultrasound HC-SR04
+def getUltrasoundInfo():
+    TRIGGER = 18
+    ECHO = 24
+
+    return {'TRIGGER':TRIGGER, 'ECHO':ECHO}
+
 # cctv processor Info
 def getCctvProcessorInfo():
     cctvId = 'cctv_1'

@@ -1,6 +1,10 @@
 
 import uuid
 
+
+
+def 
+
 # piCamera를 이용하여 영상 캡쳐 (png only)
 # @return {string} Capture 한 File 명 
 def captureImage():

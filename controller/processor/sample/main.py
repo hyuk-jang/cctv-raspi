@@ -92,7 +92,8 @@ class MainProcessor() :
     # @return {string} 'reset': 불법주차 해제, 'new': 신규 불법주차, 'continue': 불법주차 지속, 'end': 불법주차 30분 초과
     def imageProcessing(self):
         # 현재 찍은 이미지명 저장
-        captureName = cctvImagingProcessor.captureImage()
+        captureName = ''
+        # captureName = cctvImagingProcessor.captureImage()
         # 이미지 지정 재정의
         self.picStorage['prev'], self.picStorage['curr'] = self.picStorage['curr'], captureName
 
