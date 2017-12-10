@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 # Libraries
 import RPi.GPIO as GPIO
 import time

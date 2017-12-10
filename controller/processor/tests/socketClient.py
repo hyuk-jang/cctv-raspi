@@ -12,7 +12,7 @@ client.connect((HOST, PORT))
 print("[+] Connected with Server")
 
 # get file name to send
-f_send = os.getcwd() + '/sample/image/aaaa.PNG'
+f_send = os.getcwd() + '/image/aaaa.PNG'
 # f_send = "file_to_send.mp3"
 # open file
 file_name = open(f_send,'rb')

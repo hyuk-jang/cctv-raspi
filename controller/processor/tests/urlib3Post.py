@@ -4,9 +4,9 @@ def requestPostHttp(httpPath, fileName):
     print('requestPostHttp', httpPath, fileName)
     # TEST 파일명 고정으로 해봄
     fileName = 'aaaa'
-    filePath = os.getcwd() + '/sample/image/' + fileName + '.png'
+    filePath = os.getcwd() + '/image/' + fileName + '.png'
     try:
-        filePath = os.getcwd() + '/sample/image/' + fileName + '.png'
+        filePath = os.getcwd() + '/image/' + fileName + '.png'
         print('filePath\t', filePath)
         with open(filePath, 'rb') as img:
             binary_data = img.read()

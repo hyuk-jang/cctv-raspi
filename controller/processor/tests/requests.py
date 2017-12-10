@@ -12,7 +12,7 @@ filePath = os.getcwd() + '/tests/aaaa.png'
 # r = requests.post(url, files = files)
 
 # try:
-filePath = os.getcwd() + '/sample/image/' + fileName + '.png'
+filePath = os.getcwd() + '/image/' + fileName + '.png'
 print('filePath\t', filePath)
 
 with open(filePath, 'rb') as img:

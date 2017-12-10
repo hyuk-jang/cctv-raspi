@@ -12,7 +12,7 @@ sock = socket.socket()
 sock.connect((TCP_IP, TCP_PORT))
 
 #OpenCV를 이용해서 webcam으로 부터 이미지 추출
-f_send = os.getcwd() + '/sample/image/dddd.jpg'
+f_send = os.getcwd() + '/image/dddd.jpg'
 f = open(f_send, "rb")
 ret, frame = f.read()
 print("[+] Sending file...")

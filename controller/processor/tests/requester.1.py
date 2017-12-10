@@ -1,39 +1,60 @@
 # -*- coding: utf-8 -*- 
 
 import os
-import requests
+import urllib3
 import socket
 
 # CCTV 관련 데이터 Http Get 방식으로 보내고자 할 경우
-def requestGetHttp(httpPath, params):
+def requestGetHttp(httpPath, query):
+    print('request query',query)
+    url = httpPath + '?' + query if query != '' else httpPath
+    print('url',url)
+    try:
+        http = urllib3.PoolManager(retries=False)
+        r = http.request('GET', url)
+        return True if r.status == 200 else False
+    except (urllib3.exceptions.NewConnectionError) as e:
+        print(e)
+        return False
+    except:
+        print('default Error')
+        return False
 
-    res = requests.get(httpPath, params = params)
+# Image를 Http Post 방식으로 보내고자 할 경우 (이번 CCTV 프로젝트에서는 쓰지 않음)
+# FIXME 아직 완성되지 않음 (테스트해보지 못함)
+def requestPostHttp(httpPath, fileName):
+    print('requestPostHttp', httpPath, fileName)
+    # TEST 파일명 고정으로 해봄
+    fileName = 'aaaa'
+    try:
+        filePath = os.getcwd() + '/image/' + fileName + '.png'
+        print('filePath\t', filePath)
 
-    # print('request query',query)
-    # url = httpPath + '?' + query if query != '' else httpPath
-    # print('url',url)
-    # try:
-    #     http = urllib3.PoolManager(retries=False)
-    #     r = http.request('GET', url)
-    #     return True if r.status == 200 else False
-    # except (urllib3.exceptions.NewConnectionError) as e:
-    #     print(e)
-    #     return False
+
+        # files ={'image':open(filePath,'rb')}
+
+        with open(filePath, 'rb') as fp:
+            binary_data = fp.read()
+       
+
+        http = urllib3.PoolManager(retries=False)
+        print("[+] Sending file...")
+        r = http.request(
+            'POST',
+            # httpPath + ':' + fileName,
+            httpPath,
+            body = binary_data,
+            headers = {'Content-Type': 'image/jpeg'})
+        return True if r.status == 200 else False
+    except UnicodeDecodeError as e:
+        print(e)
+        return False
+    except (urllib3.exceptions.NewConnectionError) as e:
+        print(e)
+        return False
     # except:
     #     print('default Error')
     #     return False
-
-# Image를 Http Post 방식으로 보내고자 할 경우 
-def requestPostHttp(httpPath, fileName):
-    print('requestPostHttp', httpPath, fileName)
-    url = httpPath + '/' + fileName
-    # "http://localhost:3333/image_receiver/t_ta"
-    filePath = os.getcwd() + '/image/%s.png' % fileName
-    # print('filePath', filePath)
-    # headers = {'Content-Type': 'image/jpeg'}
-    files ={'image':open(filePath,'rb')}
-    r = requests.post(url, files=files)
-    return r
 
 '''
 # Image 를 Socket을 이용한 전송. 
@@ -86,16 +107,19 @@ def submitImgWithSocket(fileName, hasSendAll, socketInfo):
 
 
 if __name__ == '__main__':
-    print('Curr requester.py Process ^^^^^^^^^^')
     try:
         import config
 
         config = config.getWebServerInfo()
         print('config',config)
-        httpPath = config['host'] + config['cctvStatusManagerUrl']
-        requestGetHttp(httpPath, {})
-
         httpPath = config['host'] + config['imageReceiveManagerUrl']
+
+        # import requests
+        # url = "http://localhost:3333/uploadimg"
+        # filePath = os.getcwd() + '/image/aaaa.png'
+        # files ={'image':open(filePath,'rb')}
+        # r = requests.post(url,files=files)
+
         requestPostHttp(httpPath, 'aaaa')
 
 

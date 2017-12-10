@@ -10,33 +10,33 @@ import platform
 # TODO def 에서 datetime 을 받아서 실시간으로 mp3를 생성하는 로직 필요
 def init():
     currentPath = os.getcwd()
-    folderPath = currentPath + '/sample/sound/'
+    folderPath = currentPath + '/sound/'
 
     filePath = folderPath + 'silentAlarm.mp3'
     tts = gTTS(text='    ', lang='ko')
     tts.save(filePath)
 
     filePath = folderPath + 'firstAlarm.mp3'
-    tts = gTTS(text='불법 주정차 시간이 15분을 경과하였습니다. 신속히 차량을 이동하여 주십시오', lang='ko')
+    tts = gTTS(text='       불법 주정차 시간이 15분을 경과하였습니다. 신속히 차량을 이동하여 주십시오', lang='ko')
     tts.save(filePath)
 
     filePath = folderPath + '/secondAlarm.mp3'
-    tts = gTTS(text='불법 주정차 시간이 20분을 경과하였습니다. 신속히 차량을 이동하여 주십시오', lang='ko')
+    tts = gTTS(text='       불법 주정차 시간이 20분을 경과하였습니다. 신속히 차량을 이동하여 주십시오', lang='ko')
     tts.save(filePath)
 
     filePath = folderPath + '/thirdAlarm.mp3'
-    tts = gTTS(text='불법 주정차 시간이 25분을 경과하였습니다. 30분을 경과하면 범칙금이 납부될 예정이오니 신속히 차량을 이동하여 주십시오', lang='ko')
+    tts = gTTS(text='       불법 주정차 시간이 25분을 경과하였습니다. 30분을 경과하면 범칙금이 납부될 예정이오니 신속히 차량을 이동하여 주십시오', lang='ko')
     tts.save(filePath)
 
     filePath = folderPath + '/fourthAlarm.mp3'
-    tts = gTTS(text='불법 주정차 시간이 30분을 경과하였습니다. 범칙금이 부과되었습니다.', lang='ko')
+    tts = gTTS(text='       불법 주정차 시간이 30분을 경과하였습니다. 범칙금이 부과되었습니다.', lang='ko')
     tts.save(filePath)
 
 # init에서 생성한 mp3 4개를 depth(1~4) 에 따라서 방송
 # params {list} illegalityParkingImgList 객체
 # return {boolean} 음성 재생 성공 실패
 def startAlarm(illegalityParkingImgList):
-    folderPath = os.getcwd() + '/sample/sound/'
+    folderPath = os.getcwd() + '/sound/'
     storageLen = illegalityParkingImgList.__len__()
     print('startAlarm illegal length', storageLen)
     quotient = storageLen // 5  # 몫
@@ -63,7 +63,23 @@ def startAlarm(illegalityParkingImgList):
         print('Windows')
         os.system(filePath)
     else:   # 라즈비안일 경우
-        print('Shell')
+        print('Shell', filePath)
         os.system("mplayer " + filePath)
     
     return True
+
+
+if __name__ == '__main__':
+    print('Curr soundPlayer.py Process ^^^^^^^^^^')
+    try:
+        startAlarm(['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'])
+        print("### End ###")
+
+        # Reset by pressing CTRL + C
+    except KeyboardInterrupt:
+        print("Measurement stopped by User")
+    except:
+        print('occur except')
+
+
+

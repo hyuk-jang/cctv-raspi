@@ -14,17 +14,17 @@ def getCctvProcessorInfo():
 
 # Socket Server Connect Info
 def getSocketInfo():
-    host = '127.0.0.1'
+    host = '192.168.0.15'
     port = 3334
     return {'host': host, 'port': port}
 
 # Web Server Controller Info
 def getWebServerInfo():
-    host = 'http://127.0.0.1:3333'
+    host = 'http://192.168.0.15:3333'
     # Get Submit Cctv Status
     cctvStatusManagerUrl = '/cctv_status_receiver'
     # Post Submit Image File
-    imageReceiveManagerUrl = '/ay'
+    imageReceiveManagerUrl = '/image_receiver'
     # Receive Command By WebServer (Polling)
     checkCommanderUrl = '/check_commander'
     return {'host': host, 'cctvStatusManagerUrl': cctvStatusManagerUrl, 'imageReceiveManagerUrl': imageReceiveManagerUrl, 'checkCommanderUrl': checkCommanderUrl}
