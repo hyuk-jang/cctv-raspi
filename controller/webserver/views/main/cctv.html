@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>cctv</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-3.1.1.min.js"></script>
+
+    <style>
+        * {
+            font-family: '맑은 고딕', 'Malgun Gothic'
+        }
+
+        .container {
+            width: 1170px;
+            max-width: none !important;
+            padding: 0;
+            height: 960px;
+        }
+
+        .col-xs-9 {}
+
+        .ale {
+            width: 150px;
+            height: 117px;
+            margin: 0 auto;
+        }
+
+
+        .col-xs-3 {}
+
+
+        .row-left:nth-child(1) {
+            height: 220px;
+        }
+
+        .one {
+            height: 220px;
+            padding-top: 30px;
+        }
+
+        .row-left:nth-child(2) {
+            background: rgba(0, 0, 0, 0.2);
+            height: 460px;
+        }
+
+        .two {
+            height: 460px;
+        }
+
+        .cctv_main {
+            width: 560px;
+            height: 380px;
+            border: #000203 5px solid;
+            border-radius: 10px;
+            margin: 0 auto;
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .row-left:nth-child(3) {
+            background: rgba(0, 0, 0, 0.1);
+            height: 140px;
+            padding-left: 30px;
+        }
+
+        .thr>img {
+            border: #000203 2px solid;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-left: 13px;
+        }
+
+        .thr>p {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .thr>p:nth-child(1) {
+            margin-top: 40px;
+        }
+
+        .thr>p:nth-child(4) {
+            margin-top: 60px;
+        }
+
+        .row-right {
+            background: rgba(0, 0, 0, 0.1);
+            padding-top: 50px;
+            padding-left: 15px;
+        }
+
+        .row-right:nth-child(1) {
+            height: 100px;
+        }
+
+        .row-right:nth-child(2) {
+            height: 180px;
+        }
+
+        .row-right:nth-child(3) {
+            height: 180px;
+        }
+
+        .row-right:nth-child(4) {
+            height: 180px;
+        }
+
+        .row-right:nth-child(5) {
+            height: 180px;
+        }
+
+        .cctv_sub {
+            border: #000203 2px solid;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="jumbotron" style="margin:0; padding:0;">
+        <div class="container">
+            <div class="col-xs-9">
+                <div class="row row-left">
+                    <div class="col-xs-3 one">
+                        <div class="ale">
+                            <img src="image/red_btn_s.png" />
+                            <button type="button" class="btn btn-success" style="width:100px; margin-left:22px;">On</button>
+                        </div>
+
+                    </div>
+                    <div class="col-xs-9" style=" height:220px;">
+                        <h3 style="margin-top:70px;">주소 : 전라남도 ○○○시 ○○○ 아파트 앞 소화전</h3>
+                        <h3>현재 시간 : 15:20PM</h3>
+                    </div>
+                </div>
+
+                <div class="row row-left">
+                    <div class="col-xs-9 two">
+                        <div class="cctv_main img-rounded">
+                            <img src="image/11.jpg" width="560" height="380" />
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-xs-3 thr" style="height:460px;">
+                        <p>불법주차 경보 시작 사진</p>
+                        <img src="image/11.jpg" width="160" height="100" />
+                        <p>14:57 PM</p>
+                        <p>불법주차 경보 종료 사진</p>
+                        <img src="image/11.jpg" width="160" height="100" />
+                        <p>15:02 PM</p>
+                    </div>
+
+
+                </div>
+                <div class="row row-left">
+                    <h2>불법주차 감지 시작 사진</h2>
+                    <h2>불법 주차 감지 시각 : 14:42 PM</h2>
+                </div>
+            </div>
+
+            <div class="col-xs-3">
+                <div class="row row-right" style="border-bottom:1px solid #cbc9c9;">
+                    <p style="font-size:25px; font-weight:bold; text-align:center; ">목록</p>
+                </div>
+                <div class="row row-right">
+                    <img src="image/gre_btn_s.png" width="80" height="60" />
+                    <img class="cctv_sub" src="image/22.jpg" width="160" height="100" />
+                </div>
+                <div class="row row-right">
+                    <img src="image/gre_btn_s.png" width="80" height="60" />
+                    <img class="cctv_sub" src="image/33.jpg" width="160" height="100" />
+                </div>
+                <div class="row row-right">
+                    <img src="image/gre_btn_s.png" width="80" height="60" />
+                    <img class="cctv_sub" src="image/22.jpg" width="160" height="100" />
+                </div>
+                <div class="row row-right">
+                    <img src="image/red_btn_s.png" width="80" height="60" />
+                    <img class="cctv_sub" src="image/11.jpg" width="160" height="100" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

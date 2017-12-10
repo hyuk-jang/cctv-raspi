@@ -94,7 +94,7 @@ class MainProcessor() :
         imageReceiveManagerUrl = webServerInfo['host'] + webServerInfo['imageReceiveManagerUrl']
 
         # Requst Http Get
-        params = {'cctvid':cctvId, 'count':str(count), 'status':illegalStatus, 'img': pictureName, 'ts':str(ts)}
+        params = {'cctv_id':cctvId, 'count':str(count), 'status':illegalStatus, 'img': pictureName, 'ts':str(ts)}
         # query = 'cctvid=' + cctvId + '&count=' + str(count) + '&status=' + illegalStatus + '&img=' + self.picStorage['curr'] + '&ts=' + str(ts)
         result = requester.requestGetHttp(cctvStatusManagerUrl, params)
 
