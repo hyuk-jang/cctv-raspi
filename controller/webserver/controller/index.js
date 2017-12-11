@@ -13,68 +13,42 @@ module.exports = function (app) {
 
   // server middleware
   app.use(function (req, res, next) {
-    // req.locals = DU.makeBaseHtml(req, 1);
+    req.locals = {};
     next();
   });
 
 
-  // cctv monitoring 제공 주소
-  app.get('/', wrap(async(req, res) => {
-    BU.CLI('? what')
-    let cctv_id = req.query.cctv_id ? req.query.cctv_id : '';
+  function convertColor(obj){
+    let color = '';
+    let msg = '';
+    if(obj.count == 0){
+      color = 'gre'
+      msg = 'Normal'
+    } else if(obj.count < 15){
+      color = 'yel'
+      msg = 'Monitoring'
+    } else if(obj.count < 30){
+      color = 'red'
+      msg = 'Warning'
+    } else {
+      color = 'bla'
+      msg = 'Illegal'
+    }
+    obj.color = color;
+    obj.msg = msg;
+    
+    return obj;
+  }
 
-    // let cctvList = await biModule.getTable('cctv_info', '', '', true)
-    let cctvList = await biModule.getCctvStatus()
-    let selectCctv = _.findWhere(cctvList, {
-      cctv_id: cctv_id
-    })
-    selectCctv = _.isEmpty(selectCctv) ? _.first(cctvList) : selectCctv;
+  function convertMeasureDateToStr(obj, keyName){
+    // TEST 임시 지정 
+    keyName = keyName ? 'write_date' : 'write_date';
+    // keyName = keyName ? keyName : 'writedate';
+    return obj['measure_date'] = obj[keyName] instanceof Date ? BU.convertDateToText(obj[keyName], '', 5) : '';    
+  }
 
-
-
-
-
-    BU.CLI(selectCctv)
-
-
-    // let dailyPowerReport = await biModule.getDailyPowerReport();
-    // let moduleStatus = await biModule.getTable('v_photovoltaic_status');
-    // let inverterDataList = await biModule.getTable('v_inverter_status');
-
-
-    // req.locals.dailyPowerReport = dailyPowerReport;
-    // req.locals.moduleStatus = moduleStatus;
-    // req.locals.powerGenerationInfo = powerGenerationInfo;
-
-    return res.render('./main/cctv.html', req.locals)
-  }));
-
-
-  // 정기적으로 cctv Processor에서 http get 방식으로 데이터를 보내옴
-  app.get('/cctv_status_receiver', wrap(async(req, res) => {
-    return res.send()
-  }));
-
-  // cctv에서 polling 방식으로 데이터를 가져가는 주소
-  app.get('/check_commander', wrap(async(req, res) => {
-    return res.send()
-  }));
-
-  // cctv에서 image를 post 방식으로 보내오는 주소
-  app.post('/image_receiver', wrap(async(req, res) => {
-    upload(req, res)
-      .then(function (file) {
-        console.trace(file)
-        return res.json(file);
-      })
-      .catch(function (err) {
-        console.error('err', err)
-        return res.status(500).send(err);
-      });
-    return res.send()
-  }));
-
-  var upload = function (req, res) {
+  
+  function upload (req, res) {
     var deferred = Q.defer();
     var storage = multer.diskStorage({
       // 서버에 저장할 폴더
@@ -106,6 +80,87 @@ module.exports = function (app) {
     return deferred.promise;
   };
 
+  // cctv monitoring 제공 주소
+  app.get('/', wrap(async(req, res) => {
+    BU.CLI('index')
+    let cctv_id = req.query.cctv_id ? req.query.cctv_id : '';
+
+    let cctvList = await biModule.getCctvStatus()
+    cctvList = _.map(cctvList, cctvInfo => {
+      convertMeasureDateToStr(cctvInfo, 'measure_date')
+      convertColor(cctvInfo);
+      return cctvInfo;
+    })
+    // BU.CLI(cctvList)
+    let selectedCctvInfo = _.findWhere(cctvList, {
+      cctv_id: cctv_id
+    })
+    selectedCctvInfo = _.isEmpty(selectedCctvInfo) ? _.first(cctvList) : selectedCctvInfo;
+    convertMeasureDateToStr(selectedCctvInfo, 'measure_date')
+    convertColor(selectedCctvInfo)
+    // BU.CLI(selectedCctvInfo)
+    let selectedCctvHistory =  await biModule.getCctvHistory(selectedCctvInfo.cctv_id);
+    // BU.CLI(selectedCctvHistory)
+    selectedCctvHistory = _.each(selectedCctvHistory, his => {
+      convertMeasureDateToStr(his, 'measure_date')
+    })
+    // BU.CLI(selectedCctvHistory)
+
+    req.locals.currDate = BU.convertDateToText(new Date(), 'kor', 4)
+    req.locals.cctvList = cctvList;
+    req.locals.selectedCctvInfo = selectedCctvInfo;
+    req.locals.selectedCctvHistory = selectedCctvHistory;
+
+    return res.render('./main/cctv.html', req.locals)
+  }));
+
+
+  // 정기적으로 cctv Processor에서 http get 방식으로 데이터를 보내옴
+  app.get('/cctv_status_receiver', wrap(async(req, res) => {
+    BU.CLI('cctv_status_receiver', req.query)
+    let cctv_id = req.query.cctv_id || null;
+    let count = req.query.count || null;
+    let img = req.query.img || null;
+    let measure_date = req.query.measure_date || null;
+    BU.CLI(measure_date)
+    measure_date = measure_date.replace('_', ' ');
+
+    // BU.CLI(measure_date)
+
+    let reqQuery = {
+      cctv_id,
+      count,
+      img,
+      measure_date
+    }
+    // BU.CLI(reqQuery)
+
+    let result = await biModule.setTable('illegal_data', reqQuery)
+
+    return res.status(200).send(result)
+  }));
+
+  // cctv에서 polling 방식으로 데이터를 가져가는 주소
+  app.get('/check_commander', wrap(async(req, res) => {
+    return res.send()
+  }));
+
+  // cctv에서 image를 post 방식으로 보내오는 주소
+  app.post('/image_receiver/:filename', wrap(async(req, res) => {
+    BU.CLI('image_receiver')
+    upload(req, res)
+      .then(function (file) {
+        console.trace(file)
+        return res.json(file);
+      })
+      .catch(function (err) {
+        console.error('err', err)
+        return res.status(500).send(err);
+      });
+    return res.send()
+  }));
+
+
 
   // cctv에서 polling 방식으로 데이터를 가져가는 주소
   app.get('/test_dummy_inserter', wrap(async(req, res) => {
@@ -125,10 +180,10 @@ module.exports = function (app) {
         }
         // TEST 대충 데이터 넣음
         let rValue = _.random(0, 100);
-        if (rValue < 5) {
+        if (rValue < 20) {
           addObj.count = count = 0;
           addObj.img = 'reset';
-        } else if (rValue < 10) {
+        } else if (rValue < 40) {
           addObj.count = count = 1;
           addObj.status = 'new';
           addObj.img = 'new';

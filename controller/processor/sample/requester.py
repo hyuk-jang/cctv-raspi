@@ -89,13 +89,21 @@ if __name__ == '__main__':
     print('Curr requester.py Process ^^^^^^^^^^')
     try:
         import config
+        import time
 
-        config = config.getWebServerInfo()
-        print('config',config)
-        httpPath = config['host'] + config['cctvStatusManagerUrl']
-        requestGetHttp(httpPath, {})
+        webServerConfig = config.getWebServerInfo()
+        submitObj = {
+            'cctv_id': config.getCctvProcessorInfo()['cctvId'],
+            'count': '11',
+            'img': 'aaaa',
+            'measure_date': time.strftime("%Y-%m-%d_%H:%M:%S")
+        }
+        print (time.strftime("%Y-%m-%d_%H:%M:%S"))
+        print('webServerConfig',webServerConfig)
+        httpPath = webServerConfig['host'] + webServerConfig['cctvStatusManagerUrl']
+        requestGetHttp(httpPath, submitObj)
 
-        httpPath = config['host'] + config['imageReceiveManagerUrl']
+        httpPath = webServerConfig['host'] + webServerConfig['imageReceiveManagerUrl']
         requestPostHttp(httpPath, 'aaaa')
 
 

@@ -38,7 +38,7 @@ class MainProcessor() :
             카메라 capture
         '''
         
-        ts = time.time()
+        measure_date = time.strftime("%Y-%m-%d_%H:%M:%S")
         fileName = self.cctvMonitoring.captureImage()
         illegalStatus = self.cctvMonitoring.judgeIllegal()
         if illegalStatus == 'reset':
@@ -67,14 +67,14 @@ class MainProcessor() :
         '''
             Web Server로 Processor 상태값 및 Image 전송
         '''
-        self.sendCctvStatus2WebServer(fileName, illegalStatus, ts)
+        self.sendCctvStatus2WebServer(fileName, illegalStatus, measure_date)
 
 
     # Web Server로 현재 cctv processor 상태 값을 전송
     # @param {string} illegalStatus 불법 주차 여부 'continue': 불법주차지속, 'new': 신규 불법주차, 'reset': 불법주차 해제
     # @param {datetime} dt Capture 시각
-    def sendCctvStatus2WebServer(self, pictureName, illegalStatus, ts):
-        # print('captureTime', dt.utcnow(), captureTime, ts)
+    def sendCctvStatus2WebServer(self, pictureName, illegalStatus, measure_date):
+        # print('captureTime', dt.utcnow(), captureTime, measure_time)
 
         # 현재 저장되어 있는 이미지 리스트 길이
         illegalLength = self.illegalityParkingImgList.__len__()
@@ -94,8 +94,8 @@ class MainProcessor() :
         imageReceiveManagerUrl = webServerInfo['host'] + webServerInfo['imageReceiveManagerUrl']
 
         # Requst Http Get
-        params = {'cctv_id':cctvId, 'count':str(count), 'status':illegalStatus, 'img': pictureName, 'ts':str(ts)}
-        # query = 'cctvid=' + cctvId + '&count=' + str(count) + '&status=' + illegalStatus + '&img=' + self.picStorage['curr'] + '&ts=' + str(ts)
+        params = {'cctv_id':cctvId, 'count':str(count), 'img': pictureName, 'measure_date': measure_date}
+        # query = 'cctvid=' + cctvId + '&count=' + str(count) + '&status=' + illegalStatus + '&img=' + self.picStorage['curr'] + '&measure_time=' + measure_time
         result = requester.requestGetHttp(cctvStatusManagerUrl, params)
 
         # 사진 전송 POST

@@ -54,3 +54,11 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print("Measurement stopped by User")
         GPIO.cleanup()
+        dist = getDictance()
+        print("Measured Distance = %.1f cm" % dist)
+        time.sleep(1)
+
+        # Reset by pressing CTRL + C
+    except KeyboardInterrupt:
+        print("Measurement stopped by User")
+        GPIO.cleanup()

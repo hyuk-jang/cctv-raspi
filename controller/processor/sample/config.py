@@ -8,7 +8,7 @@ def getUltrasoundInfo():
 
 # cctv processor Info
 def getCctvProcessorInfo():
-    cctvId = 'cctv_1'
+    cctvId = 'aaaa'
 
     return {'cctvId':cctvId}
 
