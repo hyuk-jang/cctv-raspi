@@ -102,6 +102,9 @@ module.exports = function (app) {
     let selectedCctvHistory =  await biModule.getCctvHistory(selectedCctvInfo.cctv_id);
     // BU.CLI(selectedCctvHistory)
     selectedCctvHistory = _.each(selectedCctvHistory, his => {
+      if(_.isEmpty(his)){
+        return;
+      }
       convertMeasureDateToStr(his, 'measure_date')
     })
     // BU.CLI(selectedCctvHistory)
