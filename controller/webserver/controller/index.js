@@ -43,6 +43,9 @@ module.exports = function (app) {
   function convertMeasureDateToStr(obj, keyName){
     // TEST 임시 지정 
     keyName = keyName ? 'write_date' : 'write_date';
+    if(obj[keyName] == null || obj[keyName] === ''){
+      keyName = 'write_date';
+    }
     // keyName = keyName ? keyName : 'writedate';
     return obj['measure_date'] = obj[keyName] instanceof Date ? BU.convertDateToText(obj[keyName], '', 5) : '';    
   }

@@ -91,9 +91,9 @@
                   %>
                   <div class="row row-right" style="border:1px solid black">
                       <p><span style="font-size: 18px; font-weight: bold; text-indent: 5px"><%= cctvInfo.name %></span></p>
+                      <p><span style="font-size: 14px; text-indent: 5px"><%= cctvInfo.address %></span></p>
                       <img src="image/<%= cctvInfo.color %>_btn_s.png" width="80" height="60" />
                       <img class="<%= css %>" onclick="selectList(this)" data-id="<%= cctvInfo.cctv_id %>" src="image/illegal/<%= cctvInfo.img %>.png" width="160" height="100" />
-                      <p><span style="font-size: 14px; text-indent: 5px"><%= cctvInfo.address %></span></p>
                   </div>
 
               <%
