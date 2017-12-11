@@ -59,7 +59,7 @@ class MainProcessor() :
         # Sound를 재생하는데 시간이 소요되므로 Thread 처리
         tSoundPlayer = threading.Thread(target=soundPlayer.startAlarm, args=(self.illegalityParkingImgList))
         tSoundPlayer.start()
-        print('resAlarm', resAlarm)
+        # print('resAlarm', resAlarm)
 
         # resAlarm = soundPlayer.startAlarm(self.illegalityParkingImgList)
 

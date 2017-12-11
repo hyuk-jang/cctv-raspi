@@ -70,7 +70,7 @@ class CctvMonitoring (threading.Thread):
         
         # list를 비움. 
         del(self.distanceList[:])
-        print('self.distanceList  Empty', self.distanceList)
+        # print('self.distanceList  Empty', self.distanceList)
         # 현재 상태 저장
         self.currParkingStatus = returnValue
         print('returnValue', returnValue)
@@ -86,7 +86,7 @@ class CctvMonitoring (threading.Thread):
         # distance = random.randrange(30, 50)
         
         distance = getDictance()
-        print('distance',distance, self.distanceList)
+        print('distance',distance, self.distanceList.__len__())
 
         self.distanceList.append(round(distance, 1))
 

@@ -20,15 +20,15 @@ def init():
     tts = gTTS(text='       불법 주정차 시간이 15분을 경과하였습니다. 신속히 차량을 이동하여 주십시오', lang='ko')
     tts.save(filePath)
 
-    filePath = folderPath + '/secondAlarm.mp3'
+    filePath = folderPath + 'secondAlarm.mp3'
     tts = gTTS(text='       불법 주정차 시간이 20분을 경과하였습니다. 신속히 차량을 이동하여 주십시오', lang='ko')
     tts.save(filePath)
 
-    filePath = folderPath + '/thirdAlarm.mp3'
+    filePath = folderPath + 'thirdAlarm.mp3'
     tts = gTTS(text='       불법 주정차 시간이 25분을 경과하였습니다. 30분을 경과하면 범칙금이 납부될 예정이오니 신속히 차량을 이동하여 주십시오', lang='ko')
     tts.save(filePath)
 
-    filePath = folderPath + '/fourthAlarm.mp3'
+    filePath = folderPath + 'fourthAlarm.mp3'
     tts = gTTS(text='       불법 주정차 시간이 30분을 경과하였습니다. 범칙금이 부과되었습니다.', lang='ko')
     tts.save(filePath)
 
@@ -36,9 +36,9 @@ def init():
 # params {list} illegalityParkingImgList 객체
 # return {boolean} 음성 재생 성공 실패
 def startAlarm(illegalityParkingImgList):
+    print('startAlarm illegal length', illegalityParkingImgList.__len__())
     folderPath = os.getcwd() + '/sound/'
     storageLen = illegalityParkingImgList.__len__()
-    print('startAlarm illegal length', storageLen)
     quotient = storageLen // 5  # 몫
     remainder = storageLen % 5  # 나머지
 
