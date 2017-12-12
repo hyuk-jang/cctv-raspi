@@ -30,20 +30,20 @@
 
 .row-left:nth-child(2) {
   background: rgba(0, 0, 0, 0.2);
-  height: 460px;
+  height: 716px;
 }
 
 .two {
-  height: 460px;
+  height: 550px;
 }
 
 .cctv_main {
   width: 560px;
   height: 380px;
-  border: #000203 5px solid;
+  border: #333333 5px solid;
   border-radius: 10px;
   margin: 0 auto;
-  margin-top: 30px;
+  margin-top: 100px;
   overflow: hidden;
 }
 
@@ -58,34 +58,41 @@
   border-radius: 10px;
   overflow: hidden;
   margin-left: 13px;
+
 }
 
 .thr>p {
   text-align: center;
   font-size: 15px;
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .thr>p:nth-child(1) {
   margin-top: 40px;
+  margin-bottom: 5px;
 }
 
 .thr>p:nth-child(4) {
-  margin-top: 60px;
+  margin-top: 30px;
+  margin-bottom: 5px;
 }
 
 .row-right {
-  background: rgba(0, 0, 0, 0.1);
-  padding-top: 50px;
-  padding-left: 15px;
+  background: rgba(0, 0, 0, 0.1); padding-left: 12px;
+  /* padding-top: 50px;
+  padding-left: 15px; */
 }
 
+
 .row-right:nth-child(1) {
-  height: 100px;
+  /* height: 70px; */
+
 }
 
 .row-right:nth-child(2) {
   height: 180px;
+
 }
 
 .row-right:nth-child(3) {
@@ -100,8 +107,12 @@
   height: 180px;
 }
 
+.row-right>p{margin-bottom: 0px; margin-left:20px; text-align: center; }
+
+
+
 .cctv_sub {
-  border: #000203 2px solid;
+  border: #353535 2px solid;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
@@ -110,17 +121,18 @@
 
 
 .selectedCctv {
-  border: #f00888 3px solid;
+  border: #00A2E8 3px solid;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
 }
 
 #preview-list .selectedPreview {
-  border: #2a0077 4px solid;
+  border: #ED1C24 4px solid;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
+  
 }
 
 #preview-list .cctv_sub {
@@ -129,3 +141,4 @@
   overflow: hidden;
   cursor: pointer;
 }
+

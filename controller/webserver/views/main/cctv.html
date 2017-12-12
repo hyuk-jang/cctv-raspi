@@ -21,7 +21,7 @@
     <div class="jumbotron" style="margin:0; padding:0;">
         <div class="container">
             <div class="col-xs-9">
-                <div class="row row-left">
+                <div class="row row-left"style="background:#ffffff;">
                     <div class="col-xs-3 one">
                         <div class="ale">
                             <img src="image/<%- selectedCctvInfo.color %>_btn_s.png" />
@@ -44,17 +44,17 @@
 
 
 
-                    <div id="preview-list" class="col-xs-3 thr" style="height:460px;">
-                        <p>현재 사진</p>
+                    <div id="preview-list" class="col-xs-3 thr" style="height:550px; padding-left:0px;">
+                        <p style="text-align:left; margin-left:18px;">현재 사진</p>
                         <img name="preview" class="selectedPreview" data-id="<%= selectedCctvInfo.img %>" src="image/illegal/<%- selectedCctvInfo.img %>.png" width="160" height="100" />
-                        <p><%- selectedCctvInfo.measure_date %></p>
+                        <p style="text-align:left; margin-left:18px;"><%- selectedCctvInfo.measure_date %></p>
                         <%
                           if(!_.isEmpty(selectedCctvHistory.startIllegalObj)){
                             var target = selectedCctvHistory.startIllegalObj;
                         %>
-                        <p>이전 불법주차 시작 사진</p>
+                        <p style="text-align:left; margin-left:18px;">이전 불법주차 시작 사진</p>
                         <img name="preview" data-id="<%= target.img %>" class="cctv_sub" src="image/illegal/<%= target.img %>.png" width="160" height="100" />
-                        <p><%= target.measure_date %></p>
+                        <p style="margin-bottom:30px;text-align:left; margin-left:18px; "><%= target.measure_date %></p>
                         <%
                         }
                         %>
@@ -62,9 +62,9 @@
                         if(!_.isEmpty(selectedCctvHistory.endIllegalObj)){
                           var targetEnd = selectedCctvHistory.endIllegalObj;
                       %>
-                      <p>이전 불법주차 종료 사진</p>
+                      <p style="text-align:left; margin-left:18px;">이전 불법주차 종료 사진</p>
                       <img name="preview" class="cctv_sub" data-id="<%= targetEnd.img %>" src="image/illegal/<%= targetEnd.img %>.png" width="160" height="100" />
-                      <p><%= targetEnd.measure_date %></p>
+                      <p style="text-align:left; margin-left:18px;"><%= targetEnd.measure_date %></p>
                       <%
                       }
                       %>
@@ -80,8 +80,8 @@
             </div>
 
             <div class="col-xs-3">
-              <div class="row row-right" style="border-bottom:1px solid #cbc9c9;">
-                  <p style="font-size:25px; font-weight:bold; text-align:center; ">목록</p>
+              <div class="row row-right" style="border-bottom:1px solid #cbc9c9;  background:#333333; padding:0px; ">
+                  <p style="font-size:25px; font-weight:bold; text-align:center; margin-top:10px; margin-bottom:10px; color:#ffffff;">목록</p>
               </div>
               <%
                 for(var count = 0; count < cctvList.length; count++){
@@ -89,12 +89,13 @@
                   var css = cctvInfo.cctv_id === selectedCctvInfo.cctv_id ? 'selectedCctv' : 'cctv_sub';
                 
                   %>
-                  <div class="row row-right" style="border:1px solid black">
+                  <div class="row row-right">
                       <p><span style="font-size: 18px; font-weight: bold; text-indent: 5px"><%= cctvInfo.name %></span></p>
-                      <p><span style="font-size: 14px; text-indent: 5px"><%= cctvInfo.address %></span></p>
+                    
                       <img src="image/<%= cctvInfo.color %>_btn_s.png" width="80" height="60" />
                       <img class="<%= css %>" onclick="selectList(this)" data-id="<%= cctvInfo.cctv_id %>" src="image/illegal/<%= cctvInfo.img %>.png" width="160" height="100" />
-                  </div>
+                      <p><span style="font-size: 14px; text-indent: 5px;margin-left:40px;"><%= cctvInfo.address %></span></p>
+                    </div>
 
               <%
               }

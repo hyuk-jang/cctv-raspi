@@ -10,6 +10,9 @@ from MeasureCctv import CctvMonitoring
 
 class MainProcessor() :
     def __init__(self):
+
+        self.controlInfo = config.controlInfo()
+
         # 불법주차 이미지 명 리스트
         self.illegalityParkingImgList = []
         # self.illegalityParkingImgList = ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']
@@ -29,7 +32,7 @@ class MainProcessor() :
     def runScheduler(self):
         # 1분마다 실행 스케줄러 등록
         sched = BlockingScheduler()
-        sched.add_job(self.main, 'cron', year='*', month='*', day='*', week='*', day_of_week='*', hour='*', minute='*', second='0/10')
+        sched.add_job(self.main, 'cron', year='*', month='*', day='*', week='*', day_of_week='*', hour='*', minute='*', second=self.controlInfo['mainMeasureInterval'])
         sched.start()
 
     # CCTV Main Processor Def
@@ -41,10 +44,13 @@ class MainProcessor() :
         measure_date = time.strftime("%Y-%m-%d_%H:%M:%S")
         fileName = self.cctvMonitoring.captureImage()
         illegalStatus = self.cctvMonitoring.judgeIllegal()
-        if illegalStatus == 'reset':
-            del(self.illegalityParkingImgList[:])
-        else:
+        if illegalStatus == 'continue':
             self.illegalityParkingImgList.append(fileName)
+        else :
+            del(self.illegalityParkingImgList[:])
+            if illegalStatus == 'new':
+                self.illegalityParkingImgList.append(fileName)
+
 
         '''
             Web Server에서 불법 주차 전환 여부 확인 후 조치
@@ -57,12 +63,14 @@ class MainProcessor() :
         '''
         # FIXME Bluetooth Speaker가 Sound 재생이 없으면 Sleep 상태로 전환됨. 전환 방지를 위해 Speaker 실행토록 함.
         # Sound를 재생하는데 시간이 소요되므로 Thread 처리
-        tSoundPlayer = threading.Thread(target=soundPlayer.startAlarm, args=(self.illegalityParkingImgList))
+        self.illegalityParkingImgList = ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']
+        illegalLength = self.illegalityParkingImgList.__len__()
+        print('self.illegalityParkingImgList', illegalLength)
+        tSoundPlayer = threading.Thread(target=soundPlayer.startAlarm, args=(illegalLength,))
         tSoundPlayer.start()
         # print('resAlarm', resAlarm)
 
         # resAlarm = soundPlayer.startAlarm(self.illegalityParkingImgList)
-
 
         '''
             Web Server로 Processor 상태값 및 Image 전송

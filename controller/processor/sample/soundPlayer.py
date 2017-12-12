@@ -33,12 +33,12 @@ def init():
     tts.save(filePath)
 
 # init에서 생성한 mp3 4개를 depth(1~4) 에 따라서 방송
-# params {list} illegalityParkingImgList 객체
+# params {int} illegalityParkingImgList length
 # return {boolean} 음성 재생 성공 실패
-def startAlarm(illegalityParkingImgList):
-    print('startAlarm illegal length', illegalityParkingImgList.__len__())
+def startAlarm(illegalLength):
+    print('startAlarm illegal length', illegalLength)
     folderPath = os.getcwd() + '/sound/'
-    storageLen = illegalityParkingImgList.__len__()
+    storageLen = illegalLength
     quotient = storageLen // 5  # 몫
     remainder = storageLen % 5  # 나머지
 
@@ -72,14 +72,9 @@ def startAlarm(illegalityParkingImgList):
 if __name__ == '__main__':
     print('Curr soundPlayer.py Process ^^^^^^^^^^')
     try:
-        startAlarm(['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'])
+        startAlarm(20)
         print("### End ###")
 
         # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Measurement stopped by User")
-    except:
-        print('occur except')
-
-
-

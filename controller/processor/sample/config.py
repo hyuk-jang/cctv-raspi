@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*- 
+
+def controlInfo():
+    recentCalcDistanceNum = 5 # 최근 5개만 비교
+    criticalValue = 20  # 20cm
+    ultrasoundsInterval = 1 # 1 초
+    mainMeasureInterval = '*/10'    # 10초에 한번
+    # mainMeasureInterval = '0'    # 1분당 한번
+
+    return {'recentCalcDistanceNum':recentCalcDistanceNum, 'criticalValue':criticalValue, 'ultrasoundsInterval': ultrasoundsInterval, 'mainMeasureInterval':mainMeasureInterval}
+
 
 # ultrasound HC-SR04
 def getUltrasoundInfo():

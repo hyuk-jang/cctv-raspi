@@ -6,14 +6,19 @@ from picamera import PiCamera
 
 from ultrasoundHcHr04 import getDictance
 
+import config
+
 import time
  
 class CctvMonitoring (threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self) 
 
-        self.criticalValue = 20     # 초음파 측정 임계치 (20cm)
-        self.recentCalcDistanceNum = 5 # 최근 10개 측정 (10초 )
+        self.controlInfo = config.controlInfo()
+        print('self.controlInfo', self.controlInfo)
+
+        self.criticalValue = self.controlInfo['criticalValue']     # 초음파 측정 임계치 (20cm)
+        self.recentCalcDistanceNum = self.controlInfo['recentCalcDistanceNum'] # 최근 10개 측정 (10초 )
         self.distanceList = []
         self.currParkingStatus = 'reset'
 
@@ -25,7 +30,7 @@ class CctvMonitoring (threading.Thread):
     # Thread 시작 (스케줄러 동작)
     def run(self):
         sched = BlockingScheduler()
-        sched.add_job(self.measureDistance, 'interval', seconds=1)
+        sched.add_job(self.measureDistance, 'interval', seconds=self.controlInfo['ultrasoundsInterval'])
         sched.start()
 
     # 사진 저장 및 File NAme 반환
